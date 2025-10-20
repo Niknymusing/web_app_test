@@ -3,7 +3,7 @@ In-memory database for TODO items.
 In production, replace this with a proper database (PostgreSQL, MongoDB, etc.)
 """
 from typing import Dict, List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 from models import TodoCreate, TodoUpdate, TodoResponse, TodoStatus
 
@@ -30,7 +30,7 @@ class TodoDatabase:
             TodoResponse object with the created TODO
         """
         todo_id = self._generate_id()
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         todo_data = {
             "id": todo_id,
@@ -104,7 +104,7 @@ class TodoDatabase:
             if value is not None:
                 todo_data[field] = value
 
-        todo_data["updated_at"] = datetime.utcnow()
+        todo_data["updated_at"] = datetime.now(timezone.utc)
 
         return TodoResponse(**todo_data)
 
